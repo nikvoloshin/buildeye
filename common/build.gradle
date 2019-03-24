@@ -3,8 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation gradleApi()
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
-    compile project(':common')
 }
