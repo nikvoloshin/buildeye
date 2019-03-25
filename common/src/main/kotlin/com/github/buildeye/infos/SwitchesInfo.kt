@@ -1,4 +1,4 @@
-package com.github.buildeye
+package com.github.buildeye.infos
 
 data class SwitchesInfo(
         val isBuildCacheEnabled: Boolean,

@@ -1,6 +1,6 @@
 package com.github.buildeye.collectors
 
-import com.github.buildeye.InfrastructureInfo
+import com.github.buildeye.infos.InfrastructureInfo
 import org.gradle.api.invocation.Gradle
 import java.nio.charset.Charset
 import java.util.*

@@ -1,6 +1,6 @@
 package com.github.buildeye.collectors
 
-import com.github.buildeye.SwitchesInfo
+import com.github.buildeye.infos.SwitchesInfo
 import org.gradle.StartParameter
 
 class SwitchesInfoCollector {
