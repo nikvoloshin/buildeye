@@ -4,9 +4,22 @@ plugins {
 
 allprojects {
     group = 'com.github.buildeye'
+    version = project.getProperty('project.version')
 
     repositories {
         mavenCentral()
+    }
+
+    ext.publish = {
+        apply plugin: 'maven-publish'
+
+        publishing {
+            publications {
+                maven(MavenPublication) {
+                    from components.java
+                }
+            }
+        }
     }
 }
 

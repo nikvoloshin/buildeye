@@ -8,3 +8,5 @@ dependencies {
 
     compile project(':common')
 }
+
+publish()
