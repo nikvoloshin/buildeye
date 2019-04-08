@@ -1,0 +1,14 @@
+buildscript {
+    ext.buildeye_version = '0.1-SNAPSHOT'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.github.buildeye:gradle-plugin:$buildeye_version"
+    }
+}
+
+apply plugin: 'com.github.buildeye'
