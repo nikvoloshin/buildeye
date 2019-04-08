@@ -8,14 +8,9 @@ import org.gradle.BuildAdapter
 import org.gradle.BuildResult
 import org.gradle.api.invocation.Gradle
 
-class BuildListener : BuildAdapter() {
-    private lateinit var switchesInfo: SwitchesInfo
-    private lateinit var infrastructureInfo: InfrastructureInfo
-
-    override fun buildStarted(gradle: Gradle) {
-        switchesInfo = SwitchesInfoCollector().collect(gradle.startParameter)
-        infrastructureInfo = InfrastructureInfoCollector().collect(gradle)
-    }
+class BuildListener(gradle: Gradle) : BuildAdapter() {
+    private val switchesInfo: SwitchesInfo = SwitchesInfoCollector().collect(gradle.startParameter)
+    private val infrastructureInfo: InfrastructureInfo = InfrastructureInfoCollector().collect(gradle)
 
     override fun buildFinished(result: BuildResult) {
         val buildInfo = BuildInfo(
