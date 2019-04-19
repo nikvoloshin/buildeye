@@ -15,7 +15,7 @@ class BuildEyePlugin : Plugin<Project> {
     }
 
     private fun init(gradle: Gradle) {
-        gradle.addBuildListener(BuildListener(gradle))
+        gradle.addBuildListener(BuildListener())
         gradle.rootProject.logger.info("Initialized BuildEye plugin")
     }
 }
