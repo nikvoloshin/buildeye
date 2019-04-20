@@ -3,8 +3,8 @@ package com.github.buildeye.listeners
 import com.github.buildeye.collecting.BuildInfoCollector
 import com.github.buildeye.collectors.InfrastructureInfoCollector
 import com.github.buildeye.collectors.SwitchesInfoCollector
-import com.github.buildeye.infos.BuildFailInfo
-import com.github.buildeye.infos.BuildSuccessInfo
+import com.github.buildeye.infos.BuildResultInfo
+import com.github.buildeye.infos.FailureInfo
 import com.github.buildeye.property.Failure
 import com.github.buildeye.property.Value
 import com.github.buildeye.senders.BuildInfoSender
@@ -46,14 +46,14 @@ class BuildListener : BuildAdapter() {
         result.rethrowFailure()
     }
 
-    private fun createBuildResultInfo(result: BuildResult) = with(result) {
-        when (failure) {
-            null -> BuildSuccessInfo(action)
-            else -> BuildFailInfo(
-                    action,
-                    failure!!.message ?: "",
-                    ExceptionUtils.getStackTrace(failure)
-            )
-        }
+    private fun createBuildResultInfo(result: BuildResult) = when (val failure = result.failure) {
+        null -> BuildResultInfo(result.action)
+        else -> BuildResultInfo(
+                result.action,
+                FailureInfo(
+                        failure.message ?: "",
+                        ExceptionUtils.getFullStackTrace(failure)
+                )
+        )
     }
 }
