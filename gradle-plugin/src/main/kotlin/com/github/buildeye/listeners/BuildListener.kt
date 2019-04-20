@@ -1,8 +1,6 @@
 package com.github.buildeye.listeners
 
 import com.github.buildeye.collecting.BuildInfoCollector
-import com.github.buildeye.collectors.InfrastructureInfoCollector
-import com.github.buildeye.collectors.SwitchesInfoCollector
 import com.github.buildeye.infos.BuildResultInfo
 import com.github.buildeye.senders.BuildInfoSender
 import org.gradle.BuildAdapter
@@ -10,13 +8,10 @@ import org.gradle.BuildResult
 import org.gradle.api.invocation.Gradle
 
 class BuildListener : BuildAdapter() {
-    private val buildInfoCollector = BuildInfoCollector()
+    private lateinit var buildInfoCollector: BuildInfoCollector
 
     override fun projectsEvaluated(gradle: Gradle) {
-        buildInfoCollector.apply {
-            switchesInfo = SwitchesInfoCollector().collect(gradle.startParameter)
-            infrastructureInfo = InfrastructureInfoCollector().collect(gradle)
-        }
+        buildInfoCollector = BuildInfoCollector(gradle)
 
         gradle.taskGraph.addTaskExecutionGraphListener(
                 TaskGraphListener(buildInfoCollector.executionInfoCollector)

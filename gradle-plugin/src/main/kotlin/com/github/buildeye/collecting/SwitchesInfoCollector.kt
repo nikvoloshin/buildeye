@@ -1,10 +1,10 @@
-package com.github.buildeye.collectors
+package com.github.buildeye.collecting
 
 import com.github.buildeye.infos.SwitchesInfo
 import org.gradle.StartParameter
 
-class SwitchesInfoCollector {
-    fun collect(startParameter: StartParameter) = with(startParameter) {
+class SwitchesInfoCollector(private val startParameter: StartParameter) : Collector<SwitchesInfo> {
+    override fun collect() = with(startParameter) {
         SwitchesInfo(
                 isBuildCacheEnabled,
                 isConfigureOnDemand,

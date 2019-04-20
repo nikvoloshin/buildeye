@@ -1,16 +1,16 @@
-package com.github.buildeye.collectors
+package com.github.buildeye.collecting
 
 import com.github.buildeye.infos.InfrastructureInfo
-import org.gradle.api.invocation.Gradle
+import org.gradle.StartParameter
 import java.nio.charset.Charset
 import java.util.*
 
-class InfrastructureInfoCollector {
-    fun collect(gradle: Gradle) = InfrastructureInfo(
+class InfrastructureInfoCollector(private val startParameter: StartParameter) : Collector<InfrastructureInfo> {
+    override fun collect() = InfrastructureInfo(
             System.getProperty("os.name"),
             System.getProperty("os.version"),
             Runtime.getRuntime().availableProcessors(),
-            gradle.startParameter.maxWorkerCount,
+            startParameter.maxWorkerCount,
             System.getProperty("java.runtime.name"),
             System.getProperty("java.runtime.version"),
             System.getProperty("java.vm.name"),
