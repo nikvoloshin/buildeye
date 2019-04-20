@@ -5,15 +5,14 @@ import com.github.buildeye.collectors.InfrastructureInfoCollector
 import com.github.buildeye.collectors.SwitchesInfoCollector
 import com.github.buildeye.infos.Action
 import com.github.buildeye.infos.BuildResultInfo
-import com.github.buildeye.infos.FailureInfo
 import com.github.buildeye.property.Failure
 import com.github.buildeye.property.Value
 import com.github.buildeye.senders.BuildInfoSender
+import com.github.buildeye.utils.createFailureInfo
 import org.apache.log4j.Logger
 import org.gradle.BuildAdapter
 import org.gradle.BuildResult
 import org.gradle.api.invocation.Gradle
-import org.gradle.internal.impldep.org.apache.commons.lang.exception.ExceptionUtils
 
 class BuildListener : BuildAdapter() {
     companion object {
@@ -55,10 +54,7 @@ class BuildListener : BuildAdapter() {
             null -> BuildResultInfo(action)
             else -> BuildResultInfo(
                     action,
-                    FailureInfo(
-                            failure.message ?: "",
-                            ExceptionUtils.getFullStackTrace(failure)
-                    )
+                    createFailureInfo(failure)
             )
         }
     }
