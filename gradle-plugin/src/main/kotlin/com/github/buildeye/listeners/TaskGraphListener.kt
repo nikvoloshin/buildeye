@@ -12,8 +12,8 @@ import java.util.*
 class TaskGraphListener(private val executionInfoCollector: ExecutionInfoCollector) : TaskExecutionGraphListener {
     override fun graphPopulated(graph: TaskExecutionGraph) {
         executionInfoCollector.apply {
-            setStartedDate(Date())
-            setStartedTimestamp(millisTime())
+            startedDate = Date()
+            startedTimestamp = millisTime()
         }
 
         setTaskExecutionListeners(graph)
@@ -24,8 +24,8 @@ class TaskGraphListener(private val executionInfoCollector: ExecutionInfoCollect
             addTaskExecutionListener(TaskExecutionListenerDecorator())
 
             allTasks.forEach { task ->
-                TaskInfoCollector(task.name).also { collector ->
-                    executionInfoCollector.getTaskInfosCollector().addTaskInfoCollector(collector)
+                TaskInfoCollector().also { collector ->
+                    executionInfoCollector.taskInfosCollector.addTaskInfoCollector(collector)
                     task.addExecutionListener(BuildEyeTaskExecutionListenerImpl(task, collector))
                 }
             }

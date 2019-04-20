@@ -5,43 +5,31 @@ import com.github.buildeye.collectors.InfrastructureInfoCollector
 import com.github.buildeye.collectors.SwitchesInfoCollector
 import com.github.buildeye.infos.Action
 import com.github.buildeye.infos.BuildResultInfo
-import com.github.buildeye.property.Failure
-import com.github.buildeye.property.Value
 import com.github.buildeye.senders.BuildInfoSender
 import com.github.buildeye.utils.createFailureInfo
-import org.apache.log4j.Logger
 import org.gradle.BuildAdapter
 import org.gradle.BuildResult
 import org.gradle.api.invocation.Gradle
 
 class BuildListener : BuildAdapter() {
-    companion object {
-        private val log = Logger.getLogger(BuildListener::class.java)
-    }
-
     private val buildInfoCollector = BuildInfoCollector()
 
     override fun projectsEvaluated(gradle: Gradle) {
         buildInfoCollector.apply {
-            setSwitchesInfo(SwitchesInfoCollector().collect(gradle.startParameter))
-            setInfrastructureInfo(InfrastructureInfoCollector().collect(gradle))
+            switchesInfo = SwitchesInfoCollector().collect(gradle.startParameter)
+            infrastructureInfo = InfrastructureInfoCollector().collect(gradle)
         }
 
         gradle.taskGraph.addTaskExecutionGraphListener(
-                TaskGraphListener(buildInfoCollector.getExecutionInfoCollector())
+                TaskGraphListener(buildInfoCollector.executionInfoCollector)
         )
     }
 
     override fun buildFinished(result: BuildResult) {
-        buildInfoCollector.setBuildResultInfo(createBuildResultInfo(result))
+        buildInfoCollector.buildResultInfo = createBuildResultInfo(result)
 
-        val buildInfo = buildInfoCollector.get()
-
-        if (buildInfo is Failure) {
-            buildInfo.getFailure().forEach(log::error)
-        } else {
-            BuildInfoSender().send((buildInfo as Value).get())
-        }
+        val buildInfo = buildInfoCollector.collect()
+        BuildInfoSender().send(buildInfo)
 
         result.rethrowFailure()
     }

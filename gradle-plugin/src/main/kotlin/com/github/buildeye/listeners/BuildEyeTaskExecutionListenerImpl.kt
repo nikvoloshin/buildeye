@@ -14,15 +14,15 @@ class BuildEyeTaskExecutionListenerImpl(
 ) : BuildEyeTaskExecutionListener {
     override fun beforeExecute() {
         taskInfoCollector.apply {
-            setName(task.name)
-            setStartedTimestamp(millisTime())
+            name = task.name
+            startedTimestamp = millisTime()
         }
     }
 
     override fun afterExecute() {
         taskInfoCollector.apply {
-            setFinishedTimestamp(millisTime())
-            setTaskStateInfo(createTaskStateInfo(task.state))
+            finishedTimestamp = millisTime()
+            taskStateInfo = createTaskStateInfo(task.state)
         }
     }
 
