@@ -2,9 +2,9 @@ package com.github.buildeye.listeners
 
 import com.github.buildeye.collecting.TaskInfoCollector
 import com.github.buildeye.collecting.TaskInfosCollector
+import com.github.buildeye.infos.FailureInfo
 import com.github.buildeye.infos.TaskStateInfo
 import com.github.buildeye.listeners.taskExecution.BuildEyeTaskExecutionListener
-import com.github.buildeye.utils.createFailureInfoOfNullable
 import com.github.buildeye.utils.millisTime
 import org.gradle.api.Task
 import org.gradle.api.tasks.TaskState
@@ -34,7 +34,7 @@ class BuildEyeTaskExecutionListenerImpl(
     private fun createTaskStateInfo(state: TaskState): TaskStateInfo = with(state) {
         return TaskStateInfo(
                 executed,
-                createFailureInfoOfNullable(failure),
+                FailureInfo.ofNullable(failure),
                 didWork,
                 skipped,
                 skipMessage,

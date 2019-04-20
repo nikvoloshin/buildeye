@@ -5,8 +5,8 @@ import com.github.buildeye.collectors.InfrastructureInfoCollector
 import com.github.buildeye.collectors.SwitchesInfoCollector
 import com.github.buildeye.infos.Action
 import com.github.buildeye.infos.BuildResultInfo
+import com.github.buildeye.infos.FailureInfo
 import com.github.buildeye.senders.BuildInfoSender
-import com.github.buildeye.utils.createFailureInfo
 import org.gradle.BuildAdapter
 import org.gradle.BuildResult
 import org.gradle.api.invocation.Gradle
@@ -42,7 +42,7 @@ class BuildListener : BuildAdapter() {
             null -> BuildResultInfo(action)
             else -> BuildResultInfo(
                     action,
-                    createFailureInfo(failure)
+                    FailureInfo.of(failure)
             )
         }
     }
