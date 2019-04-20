@@ -6,5 +6,6 @@ data class TaskInfo(
         val name: String,
         val startedTimestamp: Long,
         val finishedTimestamp: Long,
+        val taskStateInfo: TaskStateInfo,
         val duration: Duration = Duration.ofMillis(finishedTimestamp - startedTimestamp)
 )
