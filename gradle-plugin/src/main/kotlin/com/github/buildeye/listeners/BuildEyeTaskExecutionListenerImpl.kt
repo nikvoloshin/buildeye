@@ -1,6 +1,7 @@
 package com.github.buildeye.listeners
 
 import com.github.buildeye.collecting.TaskInfoCollector
+import com.github.buildeye.collecting.TaskInfosCollector
 import com.github.buildeye.infos.TaskStateInfo
 import com.github.buildeye.listeners.taskExecution.BuildEyeTaskExecutionListener
 import com.github.buildeye.utils.createFailureInfoOfNullable
@@ -10,8 +11,10 @@ import org.gradle.api.tasks.TaskState
 
 class BuildEyeTaskExecutionListenerImpl(
         private val task: Task,
-        private val taskInfoCollector: TaskInfoCollector
+        private val taskInfosCollector: TaskInfosCollector
 ) : BuildEyeTaskExecutionListener {
+    private val taskInfoCollector = TaskInfoCollector()
+
     override fun beforeExecute() {
         taskInfoCollector.apply {
             name = task.name
@@ -24,6 +27,8 @@ class BuildEyeTaskExecutionListenerImpl(
             finishedTimestamp = millisTime()
             taskStateInfo = createTaskStateInfo(task.state)
         }
+
+        taskInfosCollector.addTaskInfo(taskInfoCollector.collect())
     }
 
     private fun createTaskStateInfo(state: TaskState): TaskStateInfo = with(state) {

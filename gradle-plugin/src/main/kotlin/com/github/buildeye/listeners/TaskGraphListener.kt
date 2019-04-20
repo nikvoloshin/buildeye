@@ -1,7 +1,6 @@
 package com.github.buildeye.listeners
 
 import com.github.buildeye.collecting.ExecutionInfoCollector
-import com.github.buildeye.collecting.TaskInfoCollector
 import com.github.buildeye.listeners.taskExecution.TaskExecutionListenerDecorator
 import com.github.buildeye.listeners.taskExecution.addExecutionListener
 import com.github.buildeye.utils.millisTime
@@ -23,11 +22,8 @@ class TaskGraphListener(private val executionInfoCollector: ExecutionInfoCollect
         graph.apply {
             addTaskExecutionListener(TaskExecutionListenerDecorator())
 
-            allTasks.forEach { task ->
-                TaskInfoCollector().also { collector ->
-                    executionInfoCollector.taskInfosCollector.addTaskInfoCollector(collector)
-                    task.addExecutionListener(BuildEyeTaskExecutionListenerImpl(task, collector))
-                }
+            allTasks.forEach {
+                it.addExecutionListener(BuildEyeTaskExecutionListenerImpl(it, executionInfoCollector.taskInfosCollector))
             }
         }
     }
