@@ -18,6 +18,7 @@ class BuildEyeTaskExecutionListenerImpl(
     override fun beforeExecute() {
         taskInfoCollector.apply {
             name = task.name
+            path = task.path
             startedTimestamp = millisTime()
         }
     }
