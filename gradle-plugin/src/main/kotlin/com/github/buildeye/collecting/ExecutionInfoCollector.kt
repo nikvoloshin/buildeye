@@ -11,7 +11,11 @@ class ExecutionInfoCollector : Collector<ExecutionInfo> {
 
     override fun collect() = ExecutionInfo(
             startedDate,
-            startedTimestamp,
-            taskInfosCollector.collect()
+            taskInfosCollector.collect().map {
+                it.copy(
+                        startedTimestamp = it.startedTimestamp - this.startedTimestamp,
+                        finishedTimestamp = it.finishedTimestamp - this.startedTimestamp
+                )
+            }
     )
 }
