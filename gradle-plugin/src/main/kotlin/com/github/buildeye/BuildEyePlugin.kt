@@ -1,6 +1,6 @@
 package com.github.buildeye
 
-import com.github.buildeye.listeners.BuildListener
+import com.github.buildeye.collecting.listeners.BuildListener
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.invocation.Gradle

@@ -1,4 +1,4 @@
-package com.github.buildeye.listeners.taskExecution
+package com.github.buildeye.collecting.listeners.taskExecution
 
 import org.gradle.api.Task
 import org.gradle.api.execution.TaskExecutionListener

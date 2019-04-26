@@ -1,8 +1,8 @@
-package com.github.buildeye.listeners
+package com.github.buildeye.collecting.listeners
 
-import com.github.buildeye.collecting.ExecutionInfoCollector
-import com.github.buildeye.listeners.taskExecution.TaskExecutionListenerDecorator
-import com.github.buildeye.listeners.taskExecution.addExecutionListener
+import com.github.buildeye.collecting.collectors.ExecutionInfoCollector
+import com.github.buildeye.collecting.listeners.taskExecution.TaskExecutionListenerDecorator
+import com.github.buildeye.collecting.listeners.taskExecution.addExecutionListener
 import com.github.buildeye.utils.millisTime
 import org.gradle.api.execution.TaskExecutionGraph
 import org.gradle.api.execution.TaskExecutionGraphListener

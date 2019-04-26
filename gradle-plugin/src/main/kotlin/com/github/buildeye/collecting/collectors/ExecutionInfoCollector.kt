@@ -1,4 +1,4 @@
-package com.github.buildeye.collecting
+package com.github.buildeye.collecting.collectors
 
 import com.github.buildeye.infos.ExecutionInfo
 import java.util.*

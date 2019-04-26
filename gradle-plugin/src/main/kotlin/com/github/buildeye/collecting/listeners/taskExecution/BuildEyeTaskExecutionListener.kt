@@ -1,4 +1,4 @@
-package com.github.buildeye.listeners.taskExecution
+package com.github.buildeye.collecting.listeners.taskExecution
 
 interface BuildEyeTaskExecutionListener {
     fun beforeExecute()

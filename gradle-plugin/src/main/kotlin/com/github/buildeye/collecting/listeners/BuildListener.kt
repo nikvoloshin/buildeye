@@ -1,6 +1,6 @@
-package com.github.buildeye.listeners
+package com.github.buildeye.collecting.listeners
 
-import com.github.buildeye.collecting.BuildInfoCollector
+import com.github.buildeye.collecting.collectors.BuildInfoCollector
 import com.github.buildeye.infos.BuildResultInfo
 import com.github.buildeye.senders.BuildInfoSender
 import org.gradle.BuildAdapter
