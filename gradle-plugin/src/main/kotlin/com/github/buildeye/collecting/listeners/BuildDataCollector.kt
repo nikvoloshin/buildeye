@@ -8,7 +8,7 @@ import org.gradle.BuildAdapter
 import org.gradle.BuildResult
 import org.gradle.api.invocation.Gradle
 
-class BuildInfoCollector(private val buildData: BuildData) : BuildAdapter() {
+class BuildDataCollector(private val buildData: BuildData) : BuildAdapter() {
     override fun projectsEvaluated(gradle: Gradle) {
         buildData.apply {
             switchesInfo = SwitchesInfoCollector(gradle.startParameter).collect()

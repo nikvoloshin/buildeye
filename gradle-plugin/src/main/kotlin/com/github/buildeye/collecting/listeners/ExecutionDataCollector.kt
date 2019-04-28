@@ -4,7 +4,7 @@ import com.github.buildeye.collecting.ExecutionData
 import org.gradle.api.execution.TaskExecutionGraph
 import org.gradle.api.execution.TaskExecutionGraphListener
 
-class ExecutionInfoCollector(private val executionData: ExecutionData) : TaskExecutionGraphListener {
+class ExecutionDataCollector(private val executionData: ExecutionData) : TaskExecutionGraphListener {
     override fun graphPopulated(graph: TaskExecutionGraph) {
         executionData.apply {
             startedDate = System.currentTimeMillis()

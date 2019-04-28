@@ -5,7 +5,7 @@ import org.gradle.api.Task
 import org.gradle.api.execution.TaskExecutionListener
 import org.gradle.api.tasks.TaskState
 
-class TaskInfoCollector(private val executionData: ExecutionData) : TaskExecutionListener {
+class TaskDataCollector(private val executionData: ExecutionData) : TaskExecutionListener {
     override fun beforeExecute(task: Task) {
         executionData.getTaskData(task.path).apply {
             path = task.path

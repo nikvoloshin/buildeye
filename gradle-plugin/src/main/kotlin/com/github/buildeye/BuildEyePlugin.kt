@@ -17,10 +17,10 @@ class BuildEyePlugin : Plugin<Project> {
 
     private fun init(gradle: Gradle) {
         val buildData = BuildData()
-        gradle.addBuildListener(BuildInfoCollector(buildData))
-        gradle.addListener(ExecutionInfoCollector(buildData.executionData))
-        gradle.addListener(TaskInfoCollector(buildData.executionData))
-        gradle.addListener(TaskStateCollector(buildData.executionData))
+        gradle.addBuildListener(BuildDataCollector(buildData))
+        gradle.addListener(ExecutionDataCollector(buildData.executionData))
+        gradle.addListener(TaskDataCollector(buildData.executionData))
+        gradle.addListener(TaskStateDataCollector(buildData.executionData))
         gradle.addListener(BuildCompletionListener(buildData))
 
         gradle.rootProject.logger.info("Initialized BuildEye plugin")

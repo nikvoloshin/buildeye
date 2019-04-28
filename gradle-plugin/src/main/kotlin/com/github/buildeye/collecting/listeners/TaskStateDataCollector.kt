@@ -7,7 +7,7 @@ import org.gradle.api.Task
 import org.gradle.api.execution.TaskExecutionListener
 import org.gradle.api.tasks.TaskState
 
-class TaskStateCollector(private val executionData: ExecutionData) : TaskExecutionListener {
+class TaskStateDataCollector(private val executionData: ExecutionData) : TaskExecutionListener {
     override fun beforeExecute(task: Task) {
 
     }
