@@ -5,8 +5,8 @@ import org.gradle.StartParameter
 import java.nio.charset.Charset
 import java.util.*
 
-class InfrastructureInfoCollector(private val startParameter: StartParameter) : Collector<InfrastructureInfo> {
-    override fun collect() = InfrastructureInfo(
+class InfrastructureInfoCollector(private val startParameter: StartParameter) {
+    fun collect() = InfrastructureInfo(
             System.getProperty("os.name"),
             System.getProperty("os.version"),
             Runtime.getRuntime().availableProcessors(),
