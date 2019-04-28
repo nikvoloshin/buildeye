@@ -8,6 +8,7 @@ import com.github.buildeye.infos.ExecutionInfo
 import com.github.buildeye.infos.TaskInfo
 import com.github.buildeye.senders.BuildInfoSender
 import org.gradle.initialization.BuildCompletionListener
+import java.util.concurrent.TimeUnit
 
 class BuildCompletionListener(private val buildData: BuildData) : BuildCompletionListener {
     @Volatile private var completed = false
@@ -36,20 +37,15 @@ class BuildCompletionListener(private val buildData: BuildData) : BuildCompletio
     private fun createExecutionInfo(executionData: ExecutionData) = with(executionData) {
         ExecutionInfo(
                 startedDate,
-                getAllTasksData().map {
-                    it.startedTimeStamp -= startedTimeStamp
-                    it.finishedTimeStamp -= startedTimeStamp
-                    createTaskInfo(it)
-                }
+                getAllTasksData().map(::createTaskInfo)
         )
     }
 
     private fun createTaskInfo(taskData: TaskData) = with(taskData) {
         TaskInfo(
-                name,
                 path,
-                startedTimeStamp,
-                finishedTimeStamp,
+                startedOffset,
+                stopwatch.elapsed(TimeUnit.MILLISECONDS),
                 stateInfo
         )
     }
