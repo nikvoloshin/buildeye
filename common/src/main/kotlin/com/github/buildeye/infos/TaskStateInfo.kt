@@ -1,11 +1,11 @@
 package com.github.buildeye.infos
 
 data class TaskStateInfo(
-        val wasExecuted: Boolean,
+        val executed: Boolean,
         val failure: FailureInfo?,
         val didWork: Boolean,
-        val wasSkipped: Boolean,
+        val skipped: Boolean,
         val skipMessage: String?,
-        val wasUpToDate: Boolean,
-        val hadNoSource: Boolean
+        val upToDate: Boolean,
+        val noSource: Boolean
 )
