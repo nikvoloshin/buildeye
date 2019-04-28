@@ -1,9 +1,7 @@
 package com.github.buildeye.collecting.listeners
 
 import com.github.buildeye.collecting.BuildData
-import com.github.buildeye.collecting.collectors.InfrastructureInfoCollector
-import com.github.buildeye.collecting.collectors.SwitchesInfoCollector
-import com.github.buildeye.infos.BuildResultInfo
+import com.github.buildeye.collecting.Collectors
 import org.gradle.BuildAdapter
 import org.gradle.BuildResult
 import org.gradle.api.invocation.Gradle
@@ -11,12 +9,12 @@ import org.gradle.api.invocation.Gradle
 class BuildDataCollector(private val buildData: BuildData) : BuildAdapter() {
     override fun projectsEvaluated(gradle: Gradle) {
         buildData.apply {
-            switchesInfo = SwitchesInfoCollector(gradle.startParameter).collect()
-            infrastructureInfo = InfrastructureInfoCollector(gradle.startParameter).collect()
+            switchesInfo = Collectors.switchesInfo(gradle.startParameter)
+            infrastructureInfo = Collectors.infrastructureInfo(gradle.startParameter)
         }
     }
 
     override fun buildFinished(result: BuildResult) {
-        buildData.buildResultInfo = BuildResultInfo.of(result.action, result.failure)
+        buildData.buildResultInfo = Collectors.buildResultInfo(result)
     }
 }

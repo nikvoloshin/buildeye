@@ -1,14 +1,9 @@
 package com.github.buildeye.collecting.listeners
 
 import com.github.buildeye.collecting.BuildData
-import com.github.buildeye.collecting.ExecutionData
-import com.github.buildeye.collecting.TaskData
-import com.github.buildeye.infos.BuildInfo
-import com.github.buildeye.infos.ExecutionInfo
-import com.github.buildeye.infos.TaskInfo
+import com.github.buildeye.collecting.Collectors
 import com.github.buildeye.senders.BuildInfoSender
 import org.gradle.initialization.BuildCompletionListener
-import java.util.concurrent.TimeUnit
 
 class BuildCompletionListener(private val buildData: BuildData) : BuildCompletionListener {
     @Volatile private var completed = false
@@ -21,32 +16,7 @@ class BuildCompletionListener(private val buildData: BuildData) : BuildCompletio
     }
 
     private fun doOnCompleted() {
-        val buildInfo = createBuildInfo(buildData)
+        val buildInfo = Collectors.buildInfo(buildData)
         BuildInfoSender().send(buildInfo)
-    }
-
-    private fun createBuildInfo(buildData: BuildData) = with(buildData) {
-        BuildInfo(
-                switchesInfo,
-                infrastructureInfo,
-                createExecutionInfo(executionData),
-                buildResultInfo
-        )
-    }
-
-    private fun createExecutionInfo(executionData: ExecutionData) = with(executionData) {
-        ExecutionInfo(
-                startedDate,
-                getAllTasksData().map(::createTaskInfo)
-        )
-    }
-
-    private fun createTaskInfo(taskData: TaskData) = with(taskData) {
-        TaskInfo(
-                path,
-                startedOffset,
-                stopwatch.elapsed(TimeUnit.MILLISECONDS),
-                stateInfo
-        )
     }
 }
