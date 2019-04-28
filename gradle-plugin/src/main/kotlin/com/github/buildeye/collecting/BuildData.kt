@@ -20,10 +20,10 @@ class ExecutionData {
     private val tasksData = mutableMapOf<String, TaskData>()
     val stopwatch = SplitStopwatch()
 
-    fun getTaskData(path: String) =
+    @Synchronized fun getTaskData(path: String) =
             tasksData[path] ?: TaskData().also { tasksData[path] = it }
 
-    fun getAllTasksData() = tasksData.values.toList()
+    @Synchronized fun getAllTasksData() = tasksData.values.toList()
 }
 
 class TaskData {
