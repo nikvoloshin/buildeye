@@ -6,6 +6,7 @@ import com.github.buildeye.utils.removeRoot
 import com.github.buildeye.utils.serialize
 import org.gradle.api.Project
 import java.io.File
+import java.io.FileNotFoundException
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -15,7 +16,12 @@ class InputsManager(project: Project) {
 
     fun save(taskPath: String, snapshot: InputsSnapshot) = serialize(getTaskSnapshotsPath(taskPath), snapshot)
 
-    fun load(taskPath: String) = deserialize<InputsSnapshot>(getTaskSnapshotsPath(taskPath))
+    fun load(taskPath: String) = try {
+        deserialize<InputsSnapshot>(getTaskSnapshotsPath(taskPath))
+    } catch (e: FileNotFoundException) {
+        null
+    }
+
 
     private fun getTaskSnapshotsPath(taskPath: String): Path {
         val systemPath = Paths.get(taskPath.replace(":", File.separator)).removeRoot()
