@@ -2,6 +2,7 @@ package com.github.buildeye.inputs
 
 import com.github.buildeye.inputs.snapshot.InputsSnapshot
 import com.github.buildeye.utils.deserialize
+import com.github.buildeye.utils.removeRoot
 import com.github.buildeye.utils.serialize
 import org.gradle.api.Project
 import java.io.File
@@ -20,6 +21,4 @@ class InputsManager(project: Project) {
         val systemPath = Paths.get(taskPath.replace(":", File.separator)).removeRoot()
         return snapshotsDir.resolve(systemPath)
     }
-
-    private fun Path.removeRoot() = this.root?.relativize(this) ?: this
 }
