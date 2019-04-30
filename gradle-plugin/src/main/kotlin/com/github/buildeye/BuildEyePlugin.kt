@@ -21,8 +21,11 @@ class BuildEyePlugin : Plugin<Project> {
 
         project.gradle.addBuildListener(BuildDataCollector(buildData))
         project.gradle.addListener(ExecutionDataCollector(buildData.executionData))
-        project.gradle.addListener(TaskDataCollector(buildData.executionData))
-        project.gradle.addListener(TaskStateDataCollector(buildData.executionData, inputsManager))
+        project.gradle.addListener(CompositeTaskExecutionListener(
+                buildData.executionData,
+                TaskDataCollector(buildData.executionData),
+                TaskStateDataCollector(buildData.executionData, inputsManager)
+        ))
         project.gradle.addListener(BuildCompletionListener(buildData))
 
         project.logger.info("Initialized BuildEye plugin")

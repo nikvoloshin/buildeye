@@ -10,11 +10,10 @@ class TaskDataCollector(private val executionData: ExecutionData) : TaskExecutio
         executionData.getTaskData(task.path).apply {
             path = task.path
             startedOffset = executionData.stopwatch.split()
-            stopwatch.start()
         }
     }
 
     override fun afterExecute(task: Task, state: TaskState) {
-        executionData.getTaskData(task.path).stopwatch.stop()
+
     }
 }
