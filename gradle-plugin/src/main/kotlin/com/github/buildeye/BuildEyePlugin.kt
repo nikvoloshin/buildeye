@@ -19,14 +19,16 @@ class BuildEyePlugin : Plugin<Project> {
         val inputsManager = InputsManager(project)
         val buildData = BuildData()
 
-        project.gradle.addBuildListener(BuildDataCollector(buildData))
-        project.gradle.addListener(ExecutionDataCollector(buildData.executionData))
-        project.gradle.addListener(CompositeTaskExecutionListener(
-                buildData.executionData,
-                TaskDataCollector(buildData.executionData),
-                TaskStateDataCollector(buildData.executionData, inputsManager)
-        ))
-        project.gradle.addListener(BuildCompletionListener(buildData))
+        listOf(
+                BuildDataCollector(buildData),
+                ExecutionDataCollector(buildData.executionData),
+                CompositeTaskExecutionListener(
+                        buildData.executionData,
+                        TaskDataCollector(buildData.executionData),
+                        TaskStateDataCollector(buildData.executionData, inputsManager)
+                ),
+                BuildCompletionListener(buildData)
+        ).forEach(project.gradle::addListener)
 
         project.logger.info("Initialized BuildEye plugin")
     }
