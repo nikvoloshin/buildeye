@@ -7,6 +7,6 @@ data class TaskStateInfo(
         val skipped: Boolean,
         val skipMessage: String?,
         val upToDate: Boolean,
-        val notUpToDateMessage: String?,
+        val outOfDateReason: OutOfDateReason?,
         val noSource: Boolean
 )

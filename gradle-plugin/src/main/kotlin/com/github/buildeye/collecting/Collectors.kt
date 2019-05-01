@@ -63,7 +63,7 @@ object Collectors {
         )
     }
 
-    fun taskStateInfo(taskState: TaskState, notUpToDateMessage: String? = null) = with(taskState) {
+    fun taskStateInfo(taskState: TaskState, outOfDateReason: OutOfDateReason? = null) = with(taskState) {
         TaskStateInfo(
                 executed,
                 failureInfo(failure),
@@ -71,7 +71,7 @@ object Collectors {
                 skipped,
                 skipMessage,
                 upToDate,
-                notUpToDateMessage,
+                outOfDateReason,
                 noSource
         )
     }

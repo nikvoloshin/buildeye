@@ -2,6 +2,14 @@ package com.github.buildeye.collecting.listeners
 
 import com.github.buildeye.collecting.Collectors
 import com.github.buildeye.collecting.ExecutionData
+import com.github.buildeye.infos.Change
+import com.github.buildeye.infos.Change.ChangeType.CHANGED
+import com.github.buildeye.infos.Change.ChangeType.NEW
+import com.github.buildeye.infos.Change.InputType.FILE
+import com.github.buildeye.infos.Change.InputType.PROPERTY
+import com.github.buildeye.infos.InputsChange
+import com.github.buildeye.infos.OutOfDateReason
+import com.github.buildeye.infos.Unknown
 import com.github.buildeye.inputs.InputsManager
 import com.github.buildeye.inputs.snapshot.InputsSnapshot
 import com.github.buildeye.utils.md5
@@ -25,37 +33,36 @@ class TaskStateDataCollector(
     }
 
     override fun afterExecute(task: Task, state: TaskState) {
-        val notUpToDateMessage = if (!state.upToDate) {
-            determineNotUpToDateReason(inputsManager.load(task.path), inputsSnapshot)
+        val outOfDateReason = if (!state.upToDate) {
+            determineOutOfDateReason(inputsManager.load(task.path), inputsSnapshot)
         } else {
             null
         }
 
-        executionData.getTaskData(task.path).stateInfo = Collectors.taskStateInfo(state, notUpToDateMessage)
+        executionData.getTaskData(task.path).stateInfo = Collectors.taskStateInfo(state, outOfDateReason)
 
         if (state.failure == null && inputsSnapshot != null) {
             inputsManager.save(task.path, inputsSnapshot!!)
         }
     }
 
-    private fun determineNotUpToDateReason(
+    private fun determineOutOfDateReason(
             previousSnapshot: InputsSnapshot?,
             currentSnapshot: InputsSnapshot?
-    ): String {
+    ): OutOfDateReason {
         if (previousSnapshot == null || currentSnapshot == null) {
-            return "Unknown"
+            return Unknown
         }
 
         val (newProperties, changedProperties) = determineChanges(previousSnapshot.properties, currentSnapshot.properties)
         val (newFiles, changedFiles) = determineChanges(previousSnapshot.inputFiles, currentSnapshot.inputFiles)
 
-        val allChanges =
-                newProperties.map { "New: $it" } +
-                changedProperties.map { "Changed: $it" } +
-                newFiles.map { "New: $it" } +
-                changedFiles.map { "Changed: $it" }
+        val allChanges = newProperties.map { Change(it, NEW, PROPERTY) } +
+                changedProperties.map { Change(it, CHANGED, PROPERTY) } +
+                newFiles.map { Change(it, NEW, FILE) } +
+                changedFiles.map { Change(it, CHANGED, FILE) }
 
-        return allChanges.joinToString("\n")
+        return if (allChanges.isEmpty()) Unknown else InputsChange(allChanges)
     }
 
     private fun <K, V> determineChanges(
