@@ -62,8 +62,10 @@ class TaskStateDataCollector(
             previousProperties: Map<K, V>,
             currentProperties: Map<K, V>
     ): Pair<List<K>, List<K>> {
-        val newProperties = (currentProperties.keys - previousProperties.keys).toList()
-        val changedProperties = currentProperties.filterNot { it.value == previousProperties[it.key] }.keys.toList()
+        val (commonKeys, newKeys) = currentProperties.keys.partition { previousProperties.containsKey(it) }
+
+        val newProperties = newKeys.toList()
+        val changedProperties = commonKeys.filter { previousProperties[it] != currentProperties[it] }
 
         return Pair(newProperties, changedProperties)
     }
