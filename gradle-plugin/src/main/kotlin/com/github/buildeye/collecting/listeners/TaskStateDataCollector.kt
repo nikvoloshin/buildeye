@@ -68,18 +68,13 @@ class TaskStateDataCollector(
         return Pair(newProperties, changedProperties)
     }
 
-    private fun createSnapshot(inputs: TaskInputs): InputsSnapshot? {
-        val properties = inputs.properties
-        val inputFiles = createFilesSnapshot(inputs.files.files)
-
-        return inputFiles?.let { InputsSnapshot(properties, inputFiles) }
+    private fun createSnapshot(inputs: TaskInputs) = try {
+        InputsSnapshot(inputs.properties, createFilesSnapshot(inputs.files.files))
+    } catch (e: IOException) {
+        null
     }
 
     private fun createFilesSnapshot(files: Iterable<File>) = runBlocking {
-        try {
-            files.associateBy { it.path.toString() }.parallelMapValues { it.value.md5() }
-        } catch (e: IOException) {
-            null
-        }
+        files.associateBy { it.path.toString() }.parallelMapValues { it.value.md5() }
     }
 }
