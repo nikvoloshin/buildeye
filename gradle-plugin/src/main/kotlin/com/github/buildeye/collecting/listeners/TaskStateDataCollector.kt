@@ -4,7 +4,6 @@ import com.github.buildeye.collecting.Collectors
 import com.github.buildeye.collecting.ExecutionData
 import com.github.buildeye.inputs.InputsManager
 import com.github.buildeye.inputs.snapshot.InputsSnapshot
-import com.github.buildeye.utils.filterValuesNotNull
 import com.github.buildeye.utils.md5
 import com.github.buildeye.utils.parallelMapValues
 import kotlinx.coroutines.runBlocking
@@ -12,12 +11,14 @@ import org.gradle.api.Task
 import org.gradle.api.execution.TaskExecutionListener
 import org.gradle.api.tasks.TaskInputs
 import org.gradle.api.tasks.TaskState
+import java.io.File
+import java.io.IOException
 
 class TaskStateDataCollector(
         private val executionData: ExecutionData,
         private val inputsManager: InputsManager
 ) : TaskExecutionListener {
-    private lateinit var inputsSnapshot: InputsSnapshot
+    private var inputsSnapshot: InputsSnapshot? = null
 
     override fun beforeExecute(task: Task) {
         inputsSnapshot = createSnapshot(task.inputs)
@@ -32,16 +33,16 @@ class TaskStateDataCollector(
 
         executionData.getTaskData(task.path).stateInfo = Collectors.taskStateInfo(state, notUpToDateMessage)
 
-        if (state.failure == null) {
-            inputsManager.save(task.path, inputsSnapshot)
+        if (state.failure == null && inputsSnapshot != null) {
+            inputsManager.save(task.path, inputsSnapshot!!)
         }
     }
 
     private fun determineNotUpToDateReason(
             previousSnapshot: InputsSnapshot?,
-            currentSnapshot: InputsSnapshot
+            currentSnapshot: InputsSnapshot?
     ): String {
-        if (previousSnapshot == null) {
+        if (previousSnapshot == null || currentSnapshot == null) {
             return "Unknown"
         }
 
@@ -67,15 +68,18 @@ class TaskStateDataCollector(
         return Pair(newProperties, changedProperties)
     }
 
-    private fun createSnapshot(inputs: TaskInputs) = InputsSnapshot(
-            inputs.properties,
-            createFilesSnapshot(inputs)
-    )
+    private fun createSnapshot(inputs: TaskInputs): InputsSnapshot? {
+        val properties = inputs.properties
+        val inputFiles = createFilesSnapshot(inputs.files.files)
 
-    private fun createFilesSnapshot(inputs: TaskInputs) = runBlocking {
-        inputs.files.files
-                .associateBy { it.path.toString() }
-                .parallelMapValues { it.value.md5() }
-                .filterValuesNotNull()
+        return inputFiles?.let { InputsSnapshot(properties, inputFiles) }
+    }
+
+    private fun createFilesSnapshot(files: Iterable<File>) = runBlocking {
+        try {
+            files.associateBy { it.path.toString() }.parallelMapValues { it.value.md5() }
+        } catch (e: IOException) {
+            null
+        }
     }
 }
