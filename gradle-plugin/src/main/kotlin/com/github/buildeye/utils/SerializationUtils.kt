@@ -11,24 +11,20 @@ import java.nio.file.Path
 fun <T> serialize(path: Path, obj: T?) {
     ensureWritable(path)
 
-    FileOutputStream(path.toFile()).use { fileOutputStream ->
-        ObjectOutputStream(fileOutputStream).use { objectOutputStream ->
-            objectOutputStream.writeObject(obj)
-        }
+    ObjectOutputStream(FileOutputStream(path.toFile())).use {
+        it.writeObject(obj)
     }
 }
 
 fun <T> deserialize(path: Path): T {
-    FileInputStream(path.toFile()).use { fileInputStream ->
-        ObjectInputStream(fileInputStream).use { objectInputStream ->
-            @Suppress("UNCHECKED_CAST")
-            return objectInputStream.readObject() as T
-        }
+    ObjectInputStream(FileInputStream(path.toFile())).use {
+        @Suppress("UNCHECKED_CAST")
+        return it.readObject() as T
     }
 }
 
 private fun ensureWritable(path: Path) {
-    with(path.normalize().toAbsolutePath()) {
+    with(path.toAbsolutePath()) {
         val parent = this.parent
 
         if (!Files.exists(parent)) {
