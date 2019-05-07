@@ -24,7 +24,9 @@ class InputsManager(project: Project) {
 
 
     private fun getTaskSnapshotsPath(taskPath: String): Path {
-        val systemPath = Paths.get(taskPath.replace(":", File.separator)).removeRoot()
-        return snapshotsDir.resolve(systemPath)
+        val systemPath = taskPath.split(":").joinToString(File.separator) {
+            it.replace(Regex("[\\W]"), "_")
+        }
+        return snapshotsDir.resolve(Paths.get(systemPath).removeRoot())
     }
 }
