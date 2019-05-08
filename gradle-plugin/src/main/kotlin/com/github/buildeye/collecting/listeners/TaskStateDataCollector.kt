@@ -3,8 +3,7 @@ package com.github.buildeye.collecting.listeners
 import com.github.buildeye.collecting.Collectors
 import com.github.buildeye.collecting.ExecutionData
 import com.github.buildeye.infos.Change
-import com.github.buildeye.infos.Change.ChangeType.CHANGED
-import com.github.buildeye.infos.Change.ChangeType.NEW
+import com.github.buildeye.infos.Change.ChangeType.*
 import com.github.buildeye.infos.Change.InputType.FILE
 import com.github.buildeye.infos.Change.InputType.PROPERTY
 import com.github.buildeye.infos.InputsChange
@@ -54,28 +53,30 @@ class TaskStateDataCollector(
             return Unknown
         }
 
-        val (newProperties, changedProperties) = determineChanges(previousSnapshot.properties, currentSnapshot.properties)
-        val (newFiles, changedFiles) = determineChanges(previousSnapshot.inputFiles, currentSnapshot.inputFiles)
+        val changes = determineChanges(previousSnapshot, currentSnapshot)
 
-        val allChanges = newProperties.map { Change(it, NEW, PROPERTY) } +
-                changedProperties.map { Change(it, CHANGED, PROPERTY) } +
-                newFiles.map { Change(it, NEW, FILE) } +
-                changedFiles.map { Change(it, CHANGED, FILE) }
-
-        return if (allChanges.isEmpty()) Unknown else InputsChange(allChanges)
+        return if (changes.isEmpty()) Unknown else InputsChange(changes)
     }
 
-    private fun <K, V> determineChanges(
-            previousProperties: Map<K, V>,
-            currentProperties: Map<K, V>
-    ): Pair<List<K>, List<K>> {
-        val (commonKeys, newKeys) = currentProperties.keys.partition { previousProperties.containsKey(it) }
+    private fun determineChanges(previousSnapshot: InputsSnapshot, currentSnapshot: InputsSnapshot) = listOf(
+            calcInputsChanges(previousSnapshot.properties, currentSnapshot.properties, PROPERTY),
+            calcInputsChanges(previousSnapshot.inputFiles, currentSnapshot.inputFiles, FILE)
+    ).flatten()
 
-        val newProperties = newKeys.toList()
-        val changedProperties = commonKeys.filter { previousProperties[it] != currentProperties[it] }
+    private fun <K> calcInputsChanges(oldInputs: Map<K, *>, newInputs: Map<K, *>, inputType: Change.InputType) =
+            convertDiffToInputsChanges(calcKeysDiff(oldInputs, newInputs), inputType)
 
-        return Pair(newProperties, changedProperties)
-    }
+    private fun <K> calcKeysDiff(oldMap: Map<K, *>, newMap: Map<K, *>) = MapsKeysDiff(
+            oldMap.keys - newMap.keys,
+            oldMap.keys.intersect(newMap.keys).filter { oldMap[it] != newMap[it] },
+            newMap.keys - oldMap.keys
+    )
+
+    private fun convertDiffToInputsChanges(diff: MapsKeysDiff<*>, inputType: Change.InputType) = listOf(
+            diff.removed.map { Change(it.toString(), REMOVED, inputType) },
+            diff.changed.map { Change(it.toString(), CHANGED, inputType) },
+            diff.new.map { Change(it.toString(), NEW, inputType) }
+    ).flatten()
 
     private fun createSnapshot(inputs: TaskInputs) = try {
         InputsSnapshot(inputs.properties, createFilesSnapshot(inputs.files.files))
@@ -86,4 +87,10 @@ class TaskStateDataCollector(
     private fun createFilesSnapshot(files: Iterable<File>) = runBlocking {
         files.associateBy { it.path.toString() }.parallelMapValues { it.value.md5() }
     }
+
+    private data class MapsKeysDiff<out K>(
+            val removed: Iterable<K>,
+            val changed: Iterable<K>,
+            val new: Iterable<K>
+    )
 }

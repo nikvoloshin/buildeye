@@ -12,7 +12,7 @@ data class Change(
         val inputType: InputType
 ) {
     enum class ChangeType {
-        NEW, CHANGED
+        NEW, REMOVED, CHANGED
     }
 
     enum class InputType {
