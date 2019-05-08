@@ -6,7 +6,6 @@ import org.gradle.StartParameter
 import org.gradle.api.tasks.TaskState
 import java.nio.charset.Charset
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 object Collectors {
     fun switchesInfo(startParameter: StartParameter) = with(startParameter) {
@@ -58,7 +57,7 @@ object Collectors {
         TaskInfo(
                 path,
                 startedOffset,
-                stopwatch.elapsed(TimeUnit.MILLISECONDS),
+                stopwatch.elapsed(),
                 stateInfo
         )
     }
