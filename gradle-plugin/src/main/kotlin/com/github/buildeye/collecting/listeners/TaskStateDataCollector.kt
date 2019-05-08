@@ -19,7 +19,6 @@ import org.gradle.api.execution.TaskExecutionListener
 import org.gradle.api.tasks.TaskInputs
 import org.gradle.api.tasks.TaskState
 import java.io.File
-import java.io.IOException
 
 class TaskStateDataCollector(
         private val executionData: ExecutionData,
@@ -78,14 +77,15 @@ class TaskStateDataCollector(
             diff.new.map { Change(it.toString(), NEW, inputType) }
     ).flatten()
 
-    private fun createSnapshot(inputs: TaskInputs) = try {
-        InputsSnapshot(inputs.properties, createFilesSnapshot(inputs.files.files))
-    } catch (e: IOException) {
-        null
-    }
+    private fun createSnapshot(inputs: TaskInputs) =
+            createFilesSnapshot(inputs.files.files)?.let { InputsSnapshot(inputs.properties, it) }
 
     private fun createFilesSnapshot(files: Iterable<File>) = runBlocking {
-        files.associateBy { it.path.toString() }.parallelMapValues { it.value.md5() }
+        try {
+            files.associateBy { it.path.toString() }.parallelMapValues { it.value.md5() }
+        } catch (e: Exception) {
+            return@runBlocking null
+        }
     }
 
     private data class MapsKeysDiff<out K>(
