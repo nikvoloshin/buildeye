@@ -5,8 +5,8 @@ plugins {
 
 dependencies {
     implementation gradleApi()
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
     
     compile project(':common')
 }
