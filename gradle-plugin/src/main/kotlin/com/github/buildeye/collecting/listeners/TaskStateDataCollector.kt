@@ -49,12 +49,12 @@ class TaskStateDataCollector(
             currentSnapshot: InputsSnapshot?
     ): OutOfDateReason {
         if (previousSnapshot == null || currentSnapshot == null) {
-            return Unknown
+            return Unknown()
         }
 
         val changes = determineChanges(previousSnapshot, currentSnapshot)
 
-        return if (changes.isEmpty()) Unknown else InputsChange(changes)
+        return if (changes.isEmpty()) Unknown() else InputsChange(changes)
     }
 
     private fun determineChanges(previousSnapshot: InputsSnapshot, currentSnapshot: InputsSnapshot) = listOf(

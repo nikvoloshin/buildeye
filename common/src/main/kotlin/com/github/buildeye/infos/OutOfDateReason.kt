@@ -1,10 +1,14 @@
 package com.github.buildeye.infos
 
-sealed class OutOfDateReason
+abstract class OutOfDateReason(val reason: Reason) {
+    enum class Reason {
+        UNKNOWN, INPUTS_CHANGE
+    }
+}
 
-object Unknown : OutOfDateReason()
+data class InputsChange(val changes: Collection<Change>) : OutOfDateReason(Reason.INPUTS_CHANGE)
 
-data class InputsChange(val changes: Iterable<Change>) : OutOfDateReason()
+class Unknown: OutOfDateReason(Reason.UNKNOWN)
 
 data class Change(
         val name: String,
