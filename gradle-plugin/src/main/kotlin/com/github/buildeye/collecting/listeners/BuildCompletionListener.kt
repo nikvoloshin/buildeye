@@ -5,7 +5,10 @@ import com.github.buildeye.collecting.Collectors
 import com.github.buildeye.senders.BuildInfoSender
 import org.gradle.initialization.BuildCompletionListener
 
-class BuildCompletionListener(private val buildData: BuildData) : BuildCompletionListener {
+class BuildCompletionListener(
+        private val buildData: BuildData,
+        private val buildInfoSender: BuildInfoSender
+) : BuildCompletionListener {
     @Volatile private var completed = false
 
     override fun completed() {
@@ -17,6 +20,6 @@ class BuildCompletionListener(private val buildData: BuildData) : BuildCompletio
 
     private fun doOnCompleted() {
         val buildInfo = Collectors.buildInfo(buildData)
-        BuildInfoSender().send(buildInfo)
+        buildInfoSender.send(buildInfo)
     }
 }
