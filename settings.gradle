@@ -1,2 +1,2 @@
 rootProject.name = 'buildeye'
-include 'gradle-plugin', 'common'
+include 'gradle-plugin', 'common', 'web-application', 'web-application:backend', 'web-application:frontend'

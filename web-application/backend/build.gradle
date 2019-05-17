@@ -1,0 +1,63 @@
+buildscript {
+    ext.ktorVersion = '1.1.5'
+
+    repositories {
+        jcenter()
+    }
+    
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+apply plugin: 'application'
+
+mainClassName = "io.ktor.server.netty.EngineMain"
+
+sourceSets {
+    main.kotlin.srcDirs = main.java.srcDirs = ['src']
+    test.kotlin.srcDirs = test.java.srcDirs = ['test']
+    main.resources.srcDirs = ['resources']
+    test.resources.srcDirs = ['testresources']
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven { url 'https://kotlin.bintray.com/ktor' }
+    maven { url "https://dl.bintray.com/kotlin/squash" }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    compile "io.ktor:ktor-server-netty:$ktorVersion"
+    compile "io.ktor:ktor-server-core:$ktorVersion"
+    compile "io.ktor:ktor-server-host-common:$ktorVersion"
+    compile "io.ktor:ktor-gson:$ktorVersion"
+    compile "ch.qos.logback:logback-classic:1.2.1"
+    testCompile "io.ktor:ktor-server-tests:$ktorVersion"
+
+    compile ("org.jetbrains.squash:squash-h2:0.2.4") {
+        exclude module: 'kotlin-runtime'
+    }
+
+    compile project(':common')
+}
+
+task cleanStatic(type: Delete) {
+    delete '/resources/static'
+}
+
+task deployStatic(type: Copy) {
+    from fileTree('../frontend/build')
+    into '/resources/static'
+}
+
+deployStatic { dependsOn 'cleanStatic', ':web-application:frontend:buildStatic' }
+clean { dependsOn 'cleanStatic' }
+processResources { dependsOn 'deployStatic' }
+run { dependsOn 'deployStatic' }
