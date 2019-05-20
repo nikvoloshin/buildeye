@@ -3,6 +3,7 @@ package com.github.buildeye
 import com.github.buildeye.infos.BuildInfo
 import com.github.buildeye.infos.OutOfDateReason
 import com.github.buildeye.serialization.OutOfDateReasonJsonAdapter
+import com.github.buildeye.storage.BuildInfosDatabase
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -12,8 +13,8 @@ import io.ktor.http.content.defaultResource
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.http.content.staticBasePackage
-import io.ktor.request.ContentTransformationException
-import io.ktor.request.receive
+import io.ktor.request.receiveOrNull
+import io.ktor.response.respond
 import io.ktor.response.respondRedirect
 import io.ktor.routing.get
 import io.ktor.routing.post
@@ -29,17 +30,23 @@ fun Application.module(testing: Boolean = false) {
             registerTypeAdapter(OutOfDateReason::class.java, OutOfDateReasonJsonAdapter())
         }
     }
-    routing {
-        get("/api/builds") {
 
+    val storage = BuildInfosDatabase()
+
+    routing {
+        get("/api/builds/{id}") {
+            call.parameters["id"]?.toIntOrNull()?.let {
+                call.respond(storage.fetchBuildInfo(it))
+            }
+        }
+
+        get("/api/builds") {
+            call.respond(storage.fetchAllBuildInfos())
         }
 
         post("/api/builds") {
-            try {
-                val data = call.receive<BuildInfo>()
-                println(data.toString())
-            } catch (e: ContentTransformationException) {
-
+            call.receiveOrNull<BuildInfo>()?.let {
+                storage.insertBuildInfo(it)
             }
         }
 
