@@ -17,7 +17,7 @@ class BuildEyePlugin : Plugin<Project> {
 
     private fun init(project: Project) {
         val inputsManager = InputsManager(project)
-        val buildData = BuildData()
+        val buildData = BuildData(project.path)
 
         listOf(
                 BuildDataCollector(buildData),

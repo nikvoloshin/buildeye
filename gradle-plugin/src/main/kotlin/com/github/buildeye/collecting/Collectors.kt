@@ -39,6 +39,7 @@ object Collectors {
 
     fun buildInfo(buildData: BuildData) = with(buildData) {
         BuildInfo(
+                project,
                 switchesInfo,
                 infrastructureInfo,
                 executionInfo(executionData),

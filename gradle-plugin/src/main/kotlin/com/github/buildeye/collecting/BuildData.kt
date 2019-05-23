@@ -7,7 +7,7 @@ import com.github.buildeye.infos.TaskStateInfo
 import com.github.buildeye.time.Stopwatch
 import kotlin.properties.Delegates
 
-class BuildData {
+class BuildData(val project: String) {
     lateinit var switchesInfo: SwitchesInfo
     lateinit var infrastructureInfo: InfrastructureInfo
     val executionData = ExecutionData()
