@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.kotlin.jvm'
+    id "com.github.johnrengelman.shadow" version "5.0.0"
 }
 
 apply plugin: 'application'
@@ -46,6 +47,12 @@ dependencies {
     }
 
     compile project(':common')
+}
+
+shadowJar {
+    manifest {
+        attributes "Main-Class" : "$mainClassName"
+    }
 }
 
 task cleanStatic(type: Delete) {
