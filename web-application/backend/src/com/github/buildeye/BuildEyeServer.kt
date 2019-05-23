@@ -1,5 +1,7 @@
 package com.github.buildeye
 
+import com.github.buildeye.Constants.API_BUILDS_PATH
+import com.github.buildeye.Constants.API_BUILD_PATH
 import com.github.buildeye.infos.BuildInfo
 import com.github.buildeye.infos.OutOfDateReason
 import com.github.buildeye.serialization.OutOfDateReasonJsonAdapter
@@ -38,17 +40,17 @@ fun Application.module(testing: Boolean = false) {
     val storage = BuildInfosDatabase(Env.databaseCatalogue)
 
     routing {
-        get("/api/builds/{id}") {
+        get("$API_BUILD_PATH/{id}") {
             call.parameters["id"]?.toIntOrNull()?.let {
                 call.respond(storage.fetchBuildInfo(it))
             }
         }
 
-        get("/api/builds") {
+        get(API_BUILDS_PATH) {
             call.respond(storage.fetchAllBuildInfos())
         }
 
-        post("/api/builds") {
+        post(API_BUILDS_PATH) {
             call.receiveOrNull<BuildInfo>()?.let {
                 storage.insertBuildInfo(it)
             }
