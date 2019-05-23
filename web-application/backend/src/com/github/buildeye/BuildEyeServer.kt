@@ -22,6 +22,10 @@ import io.ktor.routing.routing
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+object Env {
+    val databaseCatalogue: String by lazy { System.getProperty(Constants.DB_CATALOGUE_PROP, Constants.DEFAULT_DB_CATALOGUE) }
+}
+
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
@@ -31,7 +35,7 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-    val storage = BuildInfosDatabase()
+    val storage = BuildInfosDatabase(Env.databaseCatalogue)
 
     routing {
         get("/api/builds/{id}") {

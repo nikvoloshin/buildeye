@@ -17,8 +17,8 @@ import org.jetbrains.squash.statements.fetch
 import org.jetbrains.squash.statements.insertInto
 import org.jetbrains.squash.statements.values
 
-class BuildInfosDatabase : BuildInfosStorage, AutoCloseable {
-    private val db = H2Connection.createMemoryConnection()
+class BuildInfosDatabase(databaseCatalogue: String) : BuildInfosStorage, AutoCloseable {
+    private val db = H2Connection.create("jdbc:h2:/$databaseCatalogue")
 
     init {
         db.transaction {
