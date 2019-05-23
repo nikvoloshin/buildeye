@@ -29,6 +29,7 @@ class BuildInfosDatabase(databaseCatalogue: String) : BuildInfosStorage, AutoClo
     override fun fetchBuildInfo(id: Int) = BuildInfoTable.queryRowById(id) {
         BuildInfoTableModel(
                 get { this.id },
+                get { project },
                 get { switchesInfoId },
                 get { infrastructureInfoId },
                 get { executionInfoId },
@@ -36,6 +37,7 @@ class BuildInfosDatabase(databaseCatalogue: String) : BuildInfosStorage, AutoClo
         )
     }.let {
         IndexedBuildInfo(id, BuildInfo(
+                it.project,
                 fetchSwitchesInfo(it.switchesInfoId),
                 fetchInfrastructureInfo(it.infrastructureInfoId),
                 fetchExecutionInfo(it.executionInfoId),
@@ -174,6 +176,7 @@ class BuildInfosDatabase(databaseCatalogue: String) : BuildInfosStorage, AutoClo
     }
 
     override fun insertBuildInfo(buildInfo: BuildInfo) = BuildInfoTable.insert {
+        it[project] = buildInfo.project
         it[switchesInfoId] = insertSwitchesInfo(buildInfo.switchesInfo)
         it[infrastructureInfoId] = insertInfrastructureInfo(buildInfo.infrastructureInfo)
         it[executionInfoId] = insertExecutionInfo(buildInfo.executionInfo)

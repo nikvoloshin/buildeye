@@ -5,6 +5,7 @@ import com.github.buildeye.infos.OutOfDateReason
 
 data class BuildInfoTableModel(
         val id: Int,
+        val project: String,
         val switchesInfoId: Int,
         val infrastructureInfoId: Int,
         val executionInfoId: Int,

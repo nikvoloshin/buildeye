@@ -23,6 +23,7 @@ open class TableDefinitionWithId(name: String? = null) : TableDefinition(name) {
 }
 
 object BuildInfoTable : TableDefinitionWithId() {
+    val project = varchar("project_name", 100)
     val switchesInfoId = integer("switches_info_id")
     val infrastructureInfoId = integer("infrastructure_info_id")
     val executionInfoId = integer("execution_info_id")

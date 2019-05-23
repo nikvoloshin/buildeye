@@ -20,7 +20,7 @@ class BuildEyePlugin : Plugin<Project> {
 
     private fun init(project: Project, extension: BuildEyePluginExtension) {
         val inputsManager = InputsManager(project)
-        val buildData = BuildData()
+        val buildData = BuildData(project.path)
         val buildInfoSender = BuildInfoHTTPSender(lazy(extension::serverUrl))
 
         listOf(
