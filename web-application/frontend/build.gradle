@@ -6,10 +6,10 @@ task clean(type: Delete) {
     delete 'build'
 }
 
-npm_run {
-    args = ['build']
+task dev(type: NpmTask) {
+    args = ['run', 'start']
 }
 
-task buildStatic {
-    dependsOn 'npm_run'
+task build(type: NpmTask) {
+    args = ['run', 'build']
 }

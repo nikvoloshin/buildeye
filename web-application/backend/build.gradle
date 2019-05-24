@@ -27,7 +27,6 @@ sourceSets {
 }
 
 repositories {
-    mavenLocal()
     jcenter()
     maven { url 'https://kotlin.bintray.com/ktor' }
     maven { url "https://dl.bintray.com/kotlin/squash" }
@@ -60,11 +59,15 @@ task cleanStatic(type: Delete) {
 }
 
 task deployStatic(type: Copy) {
+    dependsOn 'cleanStatic', ':web-application:frontend:build'
+
     from fileTree('../frontend/build')
     into '/resources/static'
 }
 
-deployStatic { dependsOn 'cleanStatic', ':web-application:frontend:buildStatic' }
+task runApp {
+    dependsOn 'deployStatic', 'run'
+    run.mustRunAfter 'deployStatic'
+}
+
 clean { dependsOn 'cleanStatic' }
-processResources { dependsOn 'deployStatic' }
-run { dependsOn 'deployStatic' }
