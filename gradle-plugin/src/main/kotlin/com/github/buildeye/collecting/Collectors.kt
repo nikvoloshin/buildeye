@@ -50,6 +50,7 @@ object Collectors {
     private fun executionInfo(executionData: ExecutionData) = with(executionData) {
         ExecutionInfo(
                 startedDate,
+                stopwatch.elapsed(),
                 getAllTasksData().map(::taskInfo)
         )
     }

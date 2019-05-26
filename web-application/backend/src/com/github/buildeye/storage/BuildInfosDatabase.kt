@@ -81,11 +81,13 @@ class BuildInfosDatabase(databaseCatalogue: String) : BuildInfosStorage, AutoClo
     private fun fetchExecutionInfo(id: Int) = ExecutionInfoTable.queryRowById(id) {
         ExecutionInfoTableModel(
                 get { this.id },
-                get { executionStartedDate }
+                get { executionStartedDate },
+                get { duration }
         )
     }.let {
         ExecutionInfo(
                 it.executionStartedDate,
+                it.duration,
                 fetchTaskInfos(it.id)
         )
     }
@@ -190,6 +192,7 @@ class BuildInfosDatabase(databaseCatalogue: String) : BuildInfosStorage, AutoClo
 
     private fun insertExecutionInfo(executionInfo: ExecutionInfo) = ExecutionInfoTable.insert {
         it[executionStartedDate] = executionInfo.executionStartedDate
+        it[duration] = executionInfo.duration
     }.also { executionInfoId ->
         executionInfo.taskInfos.forEach { insertTaskInfo(executionInfoId, it) }
     }

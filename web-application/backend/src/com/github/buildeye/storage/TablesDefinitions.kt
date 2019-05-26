@@ -59,6 +59,7 @@ object InfrastructureInfoTable : TableDefinitionWithId() {
 
 object ExecutionInfoTable : TableDefinitionWithId() {
     val executionStartedDate = long("execution_started_date")
+    val duration = long("execution_duration")
 }
 
 object TaskInfoTable : TableDefinitionWithId() {

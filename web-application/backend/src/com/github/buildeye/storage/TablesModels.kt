@@ -14,7 +14,8 @@ data class BuildInfoTableModel(
 
 data class ExecutionInfoTableModel(
         val id: Int,
-        val executionStartedDate: Long
+        val executionStartedDate: Long,
+        val duration: Long
 )
 
 data class TaskInfoTableModel(

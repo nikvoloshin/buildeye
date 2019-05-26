@@ -15,6 +15,7 @@ class BuildDataCollector(private val buildData: BuildData) : BuildAdapter() {
     }
 
     override fun buildFinished(result: BuildResult) {
+        buildData.executionData.stopwatch.stop()
         buildData.buildResultInfo = Collectors.buildResultInfo(result)
     }
 }
