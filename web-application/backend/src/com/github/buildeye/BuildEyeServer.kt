@@ -47,7 +47,7 @@ fun Application.module(testing: Boolean = false) {
         }
 
         get(API_BUILDS_PATH) {
-            call.respond(storage.fetchAllBuildInfos())
+            call.respond(storage.fetchAllBuildInfos().sortedByDescending { it.id })
         }
 
         post(API_BUILDS_PATH) {
