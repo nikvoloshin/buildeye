@@ -1,0 +1,19 @@
+.trigger {
+
+}
+
+.content {
+    width: 100%;
+    overflow: hidden;
+    transition: height 0.25s ease-out;
+    height: auto;
+}
+
+.button {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background: initial;
+    cursor: pointer;
+    border: none;
+}

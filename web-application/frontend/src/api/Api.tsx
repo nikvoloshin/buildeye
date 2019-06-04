@@ -5,7 +5,7 @@ export function fetchAllBuilds(callback: (array: Array<IndexedBuildInfo>) => voi
 }
 
 export function fetchBuild(id: number, callback: (build: IndexedBuildInfo) => void): void {
-    doFetch(`/api/builds/${id}`, callback);
+    doFetch(`/api/build/${id}`, callback);
 }
 
 function doFetch<T>(path: string, callback: (data: T) => void): void {

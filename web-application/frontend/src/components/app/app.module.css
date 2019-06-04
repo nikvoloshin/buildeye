@@ -1,0 +1,13 @@
+.content {
+    min-width: 600px;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top: 70px;
+}
+
+.header {
+    position: fixed;
+    z-index: 1;
+}

@@ -1,0 +1,77 @@
+.list {
+    width: 60vw;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    border-bottom: 1px solid #000;
+}
+
+.listHeader {
+    width: 60vw;
+    display: grid;
+    grid-template-rows: 50px;
+    grid-template-columns: minmax(auto, 1fr) 200px 200px ;
+    grid-template-areas: "path started duration";
+    align-items: center;
+    justify-items: center;
+    font: 18px 'Montserrat', Arial, sans-serif;
+}
+
+.header {
+    width: 100%;
+    height: 45px;
+    padding-left: 20px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: minmax(auto, 1fr) 200px 200px ;
+    grid-template-areas: "path started duration";
+    align-items: center;
+    justify-items: center;
+    border-top: 1px solid #000;
+    font: 18px 'Montserrat', Arial, sans-serif;
+    color: #669999;
+}
+
+.path {
+    grid-area: path;
+    justify-self: start;
+}
+
+.startedAfter {
+    grid-area: started;
+}
+
+.duration {
+    grid-area: duration;
+}
+
+.header:hover,
+.dropdownActive {
+    background-color: #669999;
+    color: #fff;
+}
+
+.content {
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    padding: 5px 20px 20px;
+    background-color: #e2e2e2;
+}
+
+.stateItem {
+    display: flex;
+    margin-top: 8px;
+    font: 16px 'Montserrat', Arial, sans-serif;
+}
+
+.stateItemName {
+    width: 250px;
+    font-weight: 500;
+}
+
+.message {
+    margin-top: 20px;
+    font: 15px 'Montserrat', Arial, sans-serif;
+}

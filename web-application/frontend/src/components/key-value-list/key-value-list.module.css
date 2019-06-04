@@ -1,0 +1,26 @@
+.header {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+}
+
+.list {
+    list-style-type: none;
+    margin: 0 0 0 30px;
+    padding: 0;
+}
+
+.item {
+    margin-bottom: 4px;
+    display: flex;
+    font: 18px 'Montserrat', sans-serif;
+}
+
+
+.name {
+    width: 350px;
+    font-weight: 500;
+}
+
+.value {
+    color: rgba(0, 0, 0, 0.6);
+}

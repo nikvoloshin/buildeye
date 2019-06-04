@@ -1,0 +1,39 @@
+.nav {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    height: 33px;
+    width: 180px;
+    box-sizing: border-box;
+    padding-left: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    font: 500 14px 'Montserrat', sans-serif;
+    color: #000;
+    text-decoration: none;
+}
+
+.item:hover {
+    color: #006699;
+    font-weight: 600;
+}
+
+.itemActive {
+    background-color: #669999;
+    color: #fff;
+    font-weight: 600;
+}
+
+.itemActive:hover {
+    background-color: #669999;
+    color: #fff;
+    font-weight: 600;
+}

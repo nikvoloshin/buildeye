@@ -40,6 +40,7 @@ export interface InfrastructureInfo {
 
 export interface ExecutionInfo {
     executionStartedDate: number
+    duration: number
     taskInfos: Array<TaskInfo>
 }
 
@@ -78,11 +79,12 @@ export interface FailureInfo {
 
 export interface OutOfDateReason {
     reason: Reason
-    inputsChange?: Array<Change>
+    changes?: Array<Change>
 }
 
 export enum Reason {
-    UNKNOWN, INPUTS_CHANGE
+    UNKNOWN = "UNKNOWN",
+    INPUTS_CHANGE = "INPUTS_CHANGE"
 }
 
 export interface Change {
@@ -92,9 +94,12 @@ export interface Change {
 }
 
 export enum ChangeType {
-    NEW, REMOVED, CHANGED
+    NEW = "NEW",
+    REMOVED = "REMOVED",
+    CHANGED = "CHANGED"
 }
 
 export enum InputType {
-    PROPERTY, FILE
+    PROPERTY = "PROPERTY",
+    FILE = "FILE"
 }

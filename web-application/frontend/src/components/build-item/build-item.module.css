@@ -1,0 +1,54 @@
+.link {
+    display: block;
+    height: 45px;
+    border-bottom: 1px solid #669999;
+    text-decoration: none;
+    color: initial;
+}
+
+.link:hover {
+    background-color: rgba(102, 102, 153, 0.15);
+}
+
+.item {
+    display: grid;
+    grid-template-rows: 40px;
+    grid-template-columns: 60px 100px minmax(auto, 1fr) 100px 200px;
+    grid-template-areas: "success action project duration date";
+    grid-column-gap: 20px;
+    align-items: center;
+    justify-items: center;
+}
+
+.text {
+    font: 500 15px 'Montserrat', sans-serif;
+    color: #669999;
+}
+
+.successFlag {
+    grid-area: success;
+    width: 25px;
+    height: 25px;
+}
+
+.action {
+    grid-area: action;
+}
+
+.project {
+    grid-area: project;
+    justify-self: start;
+
+    font-weight: 600;
+    font-size: 15px;
+    font-style: italic;
+    color: #006699;
+}
+
+.duration {
+    grid-area: duration;
+}
+
+.date {
+    grid-area: date;
+}
