@@ -1,10 +1,10 @@
 package com.github.buildeye.storage
 
 import com.github.buildeye.infos.*
+import org.jetbrains.squash.connection.DatabaseConnection
 import org.jetbrains.squash.connection.transaction
 import org.jetbrains.squash.definition.Column
 import org.jetbrains.squash.definition.TableDefinition
-import org.jetbrains.squash.dialects.h2.H2Connection
 import org.jetbrains.squash.expressions.Expression
 import org.jetbrains.squash.expressions.eq
 import org.jetbrains.squash.expressions.literal
@@ -17,9 +17,7 @@ import org.jetbrains.squash.statements.fetch
 import org.jetbrains.squash.statements.insertInto
 import org.jetbrains.squash.statements.values
 
-class BuildInfosDatabase(databaseCatalogue: String) : BuildInfosStorage, AutoCloseable {
-    private val db = H2Connection.create("jdbc:h2:/$databaseCatalogue")
-
+class BuildInfosDatabase(private val db: DatabaseConnection) : BuildInfosStorage, AutoCloseable {
     init {
         db.transaction {
             databaseSchema().create(tables)

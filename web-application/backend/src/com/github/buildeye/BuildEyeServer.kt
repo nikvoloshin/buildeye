@@ -21,6 +21,7 @@ import io.ktor.response.respondRedirect
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.routing
+import org.jetbrains.squash.dialects.h2.H2Connection
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -37,7 +38,7 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-    val storage = BuildInfosDatabase(Env.databaseCatalogue)
+    val storage = BuildInfosDatabase(H2Connection.create(Env.databaseCatalogue))
 
     routing {
         get("$API_BUILD_PATH/{id}") {
