@@ -59,7 +59,7 @@ task cleanStatic(type: Delete) {
 }
 
 task deployStatic(type: Copy) {
-    dependsOn 'cleanStatic', ':web-application:frontend:build'
+    dependsOn 'cleanStatic', ':web-application:frontend:buildStatic'
 
     from fileTree('../frontend/build')
     into '/resources/static'
