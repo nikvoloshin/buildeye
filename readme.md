@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/nikvoloshin/buildeye.svg?branch=test_pkh)](https://travis-ci.com/nikvoloshin/buildeye)
+[![Build Status](https://travis-ci.com/nikvoloshin/buildeye.svg?branch=test_pkh)](https://travis-ci.com/nikvoloshin/buildeye)
 
 # buildeye
 A tool for analyzing and monitoring Gradle builds
