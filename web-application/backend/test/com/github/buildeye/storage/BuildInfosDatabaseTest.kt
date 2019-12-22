@@ -40,8 +40,8 @@ internal class BuildInfosDatabaseTest {
 
     @Test
     fun test(){
-        storage.insertBuildInfo(buildInfo)
-        assertEquals(buildInfo, storage.fetchBuildInfo(0).buildInfo)
+        val id = storage.insertBuildInfo(buildInfo)
+        assertEquals(buildInfo, storage.fetchBuildInfo(id).buildInfo)
     }
 
     @Test
