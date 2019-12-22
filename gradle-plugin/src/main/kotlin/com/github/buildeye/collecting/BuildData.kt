@@ -19,8 +19,7 @@ class ExecutionData {
     private val tasksData = mutableMapOf<String, TaskData>()
     val stopwatch = Stopwatch()
 
-    @Synchronized fun getTaskData(path: String) =
-            tasksData[path] ?: TaskData().also { tasksData[path] = it }
+    @Synchronized fun getTaskData(path: String) = tasksData.getOrDefault(path, TaskData())
 
     @Synchronized fun getAllTasksData() = tasksData.values.toList()
 }

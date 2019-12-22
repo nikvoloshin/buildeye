@@ -10,6 +10,6 @@ task dev(type: NpmTask) {
     args = ['run', 'start']
 }
 
-task build(type: NpmTask) {
+task buildStatic(type: NpmTask) {
     args = ['run', 'build']
 }

@@ -8,8 +8,6 @@ abstract class OutOfDateReason(val reason: Reason) {
 
 data class InputsChange(val changes: Collection<Change>) : OutOfDateReason(Reason.INPUTS_CHANGE)
 
-class Unknown: OutOfDateReason(Reason.UNKNOWN)
-
 data class Change(
         val name: String,
         val changeType: ChangeType,
@@ -23,3 +21,5 @@ data class Change(
         PROPERTY, FILE
     }
 }
+
+class Unknown: OutOfDateReason(Reason.UNKNOWN)
