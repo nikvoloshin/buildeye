@@ -2,30 +2,28 @@ package com.github.buildeye
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.jupiter.api.AfterEach
+import org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.io.TempDir
 import java.io.File
 
-
 internal class BuildEyeFunctionalTest {
-    @Rule
-    val testProjectDir: TemporaryFolder = TemporaryFolder()
+    @JvmField
+    @TempDir
+    var testProjectDir = createTempDir()
 
-    private lateinit var settingsFile: File
     private lateinit var buildFile: File
 
     @BeforeEach
     fun setUp() {
-        settingsFile = testProjectDir.newFile("settings.gradle");
-        buildFile = testProjectDir.newFile("build.gradle");
+        buildFile = File("$testProjectDir/build.gradle")
     }
 
     @Test
     fun test() {
-        val buildeye_version = "0.1-SNAPSHOT"
         val buildFileContent = """
             buildscript {
                 ext.buildeye_version = '0.1-SNAPSHOT'
@@ -36,7 +34,7 @@ internal class BuildEyeFunctionalTest {
                 }
 
                 dependencies {
-                    classpath "com.github.buildeye:gradle-plugin:$buildeye_version"
+                    classpath "com.github.buildeye:gradle-plugin:0.1-SNAPSHOT"
                 }
             }
 
@@ -46,18 +44,29 @@ internal class BuildEyeFunctionalTest {
         buildFile.writeText(buildFileContent)
 
         val result: BuildResult = GradleRunner.create()
-                .withProjectDir(testProjectDir.root)
-                .withArguments("test")
+                .withProjectDir(testProjectDir)
+                .withArguments("build")
                 .build()
 
-        print(result.output)
-    }
-
-    @AfterEach
-    fun tearDown() {
+        assertEquals(SUCCESS, result.task(":buildEnvironment")?.outcome)
     }
 
     @Test
-    fun apply() {
+    fun invalidTest() {
+        val buildFileContent = ""
+
+        buildFile.writeText(buildFileContent)
+
+        val result: BuildResult = GradleRunner.create()
+                .withProjectDir(testProjectDir)
+                .build()
+
+        assertNull(result.task(":buildEnvironment")?.outcome)
+
     }
+
+
+//    @Test
+//    fun apply() {
+//    }
 }
