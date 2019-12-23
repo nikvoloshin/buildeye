@@ -3,7 +3,6 @@ package com.github.buildeye
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -44,17 +43,11 @@ internal class BuildEyeFunctionalTest {
 
         buildFile.writeText(buildFileContent)
 
-        try {
-            val result: BuildResult = GradleRunner.create()
-                    .withProjectDir(testProjectDir)
-                    .withArguments("build")
-                    .withDebug(true)
-                    .build()
-            assertEquals(SUCCESS, result.task(":buildEnvironment")?.outcome)
-        } catch (f: UnexpectedBuildFailure) {
-            print(f.message)
-        }
-
+        val result: BuildResult = GradleRunner.create()
+                .withProjectDir(testProjectDir)
+                .withArguments("build")
+                .build()
+        assertEquals(SUCCESS, result.task(":buildEnvironment")?.outcome)
     }
 
     @Test

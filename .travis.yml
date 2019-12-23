@@ -8,6 +8,7 @@ before_install:
 script:
   - ./gradlew test build
 
+#For TravisCI
 env:
   global:
     - GRADLE_OPTS="-Xms64m"

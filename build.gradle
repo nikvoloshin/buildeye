@@ -33,6 +33,7 @@ subprojects {
     }
 }
 
+//For TravisCI
 if (System.env.TRAVIS == 'true') {
     allprojects {
         tasks.withType(GroovyCompile) {
