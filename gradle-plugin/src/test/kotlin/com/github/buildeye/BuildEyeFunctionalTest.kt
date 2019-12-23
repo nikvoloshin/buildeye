@@ -23,7 +23,7 @@ internal class BuildEyeFunctionalTest {
     }
 
     @Test
-    fun test() {
+    fun apply() {
         val buildFileContent = """
             buildscript {
                 ext.buildeye_version = '0.1-SNAPSHOT'
@@ -45,7 +45,7 @@ internal class BuildEyeFunctionalTest {
 
         val result: BuildResult = GradleRunner.create()
                 .withProjectDir(testProjectDir)
-                .withArguments("build")
+                .withArguments("buildEnvironment")
                 .build()
 
         assertEquals(SUCCESS, result.task(":buildEnvironment")?.outcome)
@@ -64,9 +64,4 @@ internal class BuildEyeFunctionalTest {
         assertNull(result.task(":buildEnvironment")?.outcome)
 
     }
-
-
-//    @Test
-//    fun apply() {
-//    }
 }
