@@ -10,4 +10,4 @@ script:
 
 env:
   global:
-    - GRADLE_OPTS="-Xms128m"
+    - GRADLE_OPTS="-Xms64m"
