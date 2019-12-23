@@ -45,7 +45,8 @@ internal class BuildEyeFunctionalTest {
 
         val result: BuildResult = GradleRunner.create()
                 .withProjectDir(testProjectDir)
-                .withArguments("buildEnvironment")
+                .withArguments("build")
+                .withDebug(true)
                 .build()
 
         assertEquals(SUCCESS, result.task(":buildEnvironment")?.outcome)
